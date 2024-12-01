@@ -1,11 +1,23 @@
-FROM python:3.9-slim
+# Utiliser une image Node.js officielle avec une version compatible
+FROM node:18
+
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-COPY bot.py /app/
-COPY requirements.txt /app/
+# Copier les fichiers package.json et package-lock.json pour installer les dépendances
+COPY package*.json ./
 
-# Étape 4 : Installer les dépendances
-RUN pip install --no-cache-dir -r requirements.txt
+# Installer les dépendances
+RUN npm install
 
-# Étape 5 : Lancer le bot
-CMD ["python", "bot.py"]
+# Copier tout le projet dans le conteneur
+COPY . .
+
+# Compiler le projet TypeScript
+RUN npx tsc
+
+# Exposer un port si nécessaire (non requis pour Discord.js)
+# EXPOSE 3000
+
+# Commande par défaut pour exécuter le bot
+CMD ["node", "dist/index.js"]
