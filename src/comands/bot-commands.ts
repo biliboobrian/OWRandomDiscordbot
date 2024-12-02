@@ -1,5 +1,5 @@
 import { Message, OmitPartialGroupDMChannel } from "discord.js";
-import { UserData, userDatas } from "../config/userData";
+import { UserData, db } from "../config/userData";
 import { CharType } from "../enums/charType.enum";
 import { Pool } from "../config/pool";
 
@@ -82,8 +82,8 @@ export class BotCommands {
   }
 
   private getPoolInUserDb(type: CharType): Pool {
-    userDatas[this.userId] ||= new UserData();
-    return userDatas[this.userId].getPool(type);
+    db[this.userId] ||= new UserData();
+    return db[this.userId].getPool(type);
   }
 
   private resetPool(type: CharType): void {

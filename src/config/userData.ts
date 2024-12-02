@@ -18,4 +18,4 @@ export class UserData {
   }
 }
 
-export const userDatas: Record<string, UserData> = {};
+export const db: Record<string, UserData> = {};
