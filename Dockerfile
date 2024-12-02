@@ -16,8 +16,5 @@ COPY . .
 # Compiler le projet TypeScript
 RUN npm run build
 
-# Vérifiez le contenu du dossier dist (pour debug)
-RUN ls -al dist
-
 # Commande par défaut pour exécuter le bot
-CMD ["node", "dist/index.js"]
+CMD ["npm", "start:dist"]
