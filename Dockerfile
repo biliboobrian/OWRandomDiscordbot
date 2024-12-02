@@ -17,4 +17,4 @@ COPY . .
 RUN npm run build
 
 # Commande par défaut pour exécuter le bot
-CMD ["npm", "start:dist"]
+CMD ["npm", "run", "start:dist"]
