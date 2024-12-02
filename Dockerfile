@@ -16,8 +16,8 @@ COPY . .
 # Compiler le projet TypeScript
 RUN npm run build
 
-# Exposer un port si nécessaire (non requis pour Discord.js)
-# EXPOSE 3000
+# Vérifiez le contenu du dossier dist (pour debug)
+RUN ls -al dist
 
 # Commande par défaut pour exécuter le bot
 CMD ["node", "dist/index.js"]
