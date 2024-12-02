@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Compiler le projet TypeScript
-RUN npx tsc
+RUN npm run build
 
 # Exposer un port si nécessaire (non requis pour Discord.js)
 # EXPOSE 3000

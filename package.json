@@ -2,10 +2,11 @@
   "name": "owrandomdiscordbot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx ts-node src/index.ts"
+    "build": "tsc",
+    "start:dist": "node dist/index.js",
+    "start": "nodemon --watch src --ext ts --exec ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -19,10 +20,13 @@
   },
   "homepage": "https://github.com/biliboobrian/OWRandomDiscordbot#readme",
   "dependencies": {
-    "@types/node": "^22.10.1",
-    "discord.js": "^14.16.3",
-    "sqlite3": "^5.1.7",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "discord.js": "14.16.3",
+    "sqlite3": "5.1.7"
+  },
+  "devDependencies": {
+    "typescript": "5.7.2",
+    "ts-node": "10.9.2",
+    "nodemon": "3.1.7",
+    "@types/node": "22.10.1"
   }
 }
