@@ -19,11 +19,12 @@ export class Stats {
 
   private initializeTables() {
     const createTableQuery = `
-            CREATE TABLE IF NOT EXISTS statistics (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                userId TEXT NOT NULL,
-                action TEXT NOT NULL,
-                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            CREATE TABLE IF NOT EXISTS user_stats (
+                user_id INTEGER,
+                role TEXT,
+                hero TEXT,
+                count INTEGER,
+                PRIMARY KEY (user_id, role, hero)
             );
         `;
     this.db.run(createTableQuery, (err) => {
@@ -33,12 +34,14 @@ export class Stats {
     });
   }
 
-  addStatistic(userId: string, action: string): void {
+  addCountOnHero(userId: string, role: string, hero: string): void {
     const insertQuery = `
-            INSERT INTO statistics (userId, action)
-            VALUES (?, ?);
+            INSERT INTO user_stats (user_id, role, hero, count)
+        VALUES (?, ?, ?, 1)
+        ON CONFLICT(user_id, role, hero)
+        DO UPDATE SET count = count + 1
         `;
-    this.db.run(insertQuery, [userId, action], (err) => {
+    this.db.run(insertQuery, [userId, role, hero], (err) => {
       if (err) {
         console.error("Erreur lors de l'ajout des statistiques:", err.message);
       } else {
@@ -47,21 +50,39 @@ export class Stats {
     });
   }
 
-  getStatistics(userId: string, callback: (rows: any[]) => void): void {
-    const selectQuery = `
-            SELECT * FROM statistics
-            WHERE userId = ?;
-        `;
-    this.db.all(selectQuery, [userId], (err, rows) => {
-      if (err) {
-        console.error(
-          "Erreur lors de la récupération des statistiques:",
-          err.message
-        );
-        callback([]);
-      } else {
-        callback(rows);
-      }
+  getUserStatisticByRole(userId: string, role: string): Promise<UserStats[]> {
+    return new Promise((resolve, reject) => {
+      const selectQuery = `
+        SELECT * FROM user_stats
+        WHERE user_id = ? AND role = ? ORDER BY count DESC;
+    `;
+      this.db.all<UserStats>(selectQuery, [userId, role], (err, rows) => {
+        if (err) {
+          reject(
+            `Erreur lors de la récupération des statistiques:\n ${err.message}`
+          );
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  }
+
+  getUserStatistic(userId: string): Promise<UserStats[]> {
+    return new Promise((resolve, reject) => {
+      const selectQuery = `
+        SELECT * FROM user_stats
+        WHERE user_id = ? ORDER BY count DESC;
+    `;
+      this.db.all<UserStats>(selectQuery, [userId], (err, rows) => {
+        if (err) {
+          reject(
+            `Erreur lors de la récupération des statistiques:\n ${err.message}`
+          );
+        } else {
+          resolve(rows);
+        }
+      });
     });
   }
 
@@ -77,4 +98,11 @@ export class Stats {
       }
     });
   }
+}
+
+export interface UserStats {
+  userId: string;
+  role: string;
+  hero: string;
+  count: number;
 }

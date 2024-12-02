@@ -1,4 +1,4 @@
-import { CharType } from "../enums/charType.enum";
+import { CharType, CharTypeName } from "../enums/charType.enum";
 import { Pool } from "./pool";
 
 export class UserData {
@@ -6,13 +6,13 @@ export class UserData {
   public dps: Pool = new Pool(CharType.Dps);
   public tanks: Pool = new Pool(CharType.Tank);
 
-  getPool(type: CharType): Pool {
+  getPool(type: CharTypeName): Pool {
     switch (type) {
-      case CharType.Healer:
+      case CharTypeName.Healer:
         return this.healers;
-      case CharType.Dps:
+      case CharTypeName.Dps:
         return this.dps;
-      case CharType.Tank:
+      case CharTypeName.Tank:
         return this.tanks;
     }
   }

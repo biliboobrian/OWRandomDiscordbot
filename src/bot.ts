@@ -20,7 +20,7 @@ export class Bot {
         const command = args.shift()?.toLowerCase();
         if (!command) return;
 
-        const botCommands = new BotCommands(message);
+        const botCommands = new BotCommands(message, this.stats);
 
         switch (command) {
           case "h":
@@ -65,6 +65,25 @@ export class Bot {
             break;
           case "tl":
           case "tanks_left":
+            await botCommands.help();
+            break;
+          case "hs":
+          case "healers_stats":
+            await botCommands.usersStats(CharType.Healer);
+            break;
+          case "ds":
+          case "dps_stats":
+            await botCommands.usersStats(CharType.Dps);
+            break;
+          case "ts":
+          case "tanks_stats":
+            await botCommands.usersStats(CharType.Tank);
+            break;
+          case "s":
+          case "stats":
+            await botCommands.usersAllStats();
+            break;
+          case "help":
             await botCommands.help();
             break;
           default:
